@@ -1,6 +1,9 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'reuseContainer.dart';
+import 'iconWidget.dart';
+
 
 const newcolour = Color(0xFF1D1E1F);
 
@@ -23,25 +26,36 @@ class _InputPageState extends State<InputPage> {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: ReuseContainer(colour: newcolour),
+                  child: ReuseContainer(
+                      colour: newcolour,
+                    cardChild: iconWideget(icon: FontAwesomeIcons.mars,
+                      text: "MALE",),
+                  ),
                 ),
                 Expanded(
-                  child: ReuseContainer(colour: newcolour),
+                  child: ReuseContainer(colour: newcolour,
+                      cardChild: iconWideget(icon: FontAwesomeIcons.venus,
+                                             text: "FEMALE"),
+                ),
                 ),
               ],
             ),
           ),
           Expanded(
-            child: ReuseContainer(colour: newcolour),
+
+            child: ReuseContainer(colour: newcolour,cardChild: iconWideget(icon: FontAwesomeIcons.venus,
+                text: "FEMALE"),)
           ),
           Expanded(
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: ReuseContainer(colour: newcolour),
+                  child: ReuseContainer(colour: newcolour,cardChild: iconWideget(icon: FontAwesomeIcons.venus,
+                      text: "FEMALE")),
                 ),
                 Expanded(
-                  child: ReuseContainer(colour: newcolour),
+                  child: ReuseContainer(colour: newcolour,cardChild: iconWideget(icon: FontAwesomeIcons.venus,
+                      text: "FEMALE")),
                 ),
               ],
             ),
@@ -71,18 +85,3 @@ class _InputPageState extends State<InputPage> {
   }
 }
 
-class ReuseContainer extends StatelessWidget {
-  ReuseContainer({required this.colour});
-  Color colour;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(15.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        color: colour,
-      ),
-    );
-  }
-}
