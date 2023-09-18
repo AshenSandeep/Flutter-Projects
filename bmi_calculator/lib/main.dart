@@ -12,7 +12,7 @@ class BMI extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         primaryColor: Colors.green, // Set your primary color here
-        scaffoldBackgroundColor: Colors.orange.shade400,
+        scaffoldBackgroundColor: Color(0xFFd1cfe2),
 
       ),
       home:InputPage(),

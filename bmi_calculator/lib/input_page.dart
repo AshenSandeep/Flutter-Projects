@@ -1,11 +1,13 @@
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'reuseContainer.dart';
 import 'iconWidget.dart';
+import 'constants.dart';
 
-
-const newcolour = Color(0xFF1D1E1F);
+enum Gender {
+  MALE,
+  FEMALE,
+}
 
 class InputPage extends StatefulWidget {
   @override
@@ -13,12 +15,37 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
+  Color maleCardColour = kInactiveCardColour;
+  Color femaleCardColour = kInactiveCardColour;
+  Gender selectedGender = Gender.MALE;
+  int height = 180;
+  //1 = male, 0 = female
+  // void updateColour(Gender gender) {
+  //   // if (gender == Gender.MALE) {
+  //   //   if (maleCardColour == inactiveCardColour) {        //these lines of codes are replaced by the Ternary
+  //   //     maleCardColour = activeCardColour;
+  //   //     femaleCardColour = inactiveCardColour;
+  //   //
+  //   //   } else {
+  //   //     maleCardColour = inactiveCardColour;
+  //   //   }
+  //   // }
+  //   //  if (gender == Gender.FEMALE) {
+  //   //   if (femaleCardColour == inactiveCardColour) {
+  //   //     femaleCardColour = activeCardColour;
+  //   //     maleCardColour = inactiveCardColour;
+  //   //   } else {
+  //   //     femaleCardColour = inactiveCardColour;
+  //   //   }
+  //   // }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('BMI CALCULATOR'),
-        backgroundColor: Colors.greenAccent,
+        backgroundColor: Colors.redAccent,
       ),
       body: Column(
         children: <Widget>[
@@ -26,36 +53,93 @@ class _InputPageState extends State<InputPage> {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: ReuseContainer(
-                      colour: newcolour,
-                    cardChild: iconWideget(icon: FontAwesomeIcons.mars,
-                      text: "MALE",),
+                    child: ReuseContainer(
+                  onPress: () {
+                    setState(() {
+                      selectedGender = Gender.MALE;
+                    });
+                  },
+                  colour: selectedGender == Gender.MALE
+                      ? kActiveCardColour
+                      : kInactiveCardColour,
+                  cardChild: IconWideget(
+                    icon: FontAwesomeIcons.mars,
+                    text: "MALE",
                   ),
-                ),
+                )),
                 Expanded(
-                  child: ReuseContainer(colour: newcolour,
-                      cardChild: iconWideget(icon: FontAwesomeIcons.venus,
-                                             text: "FEMALE"),
-                ),
-                ),
+                    child: ReuseContainer(
+                  onPress: () {
+                    setState(() {
+                      selectedGender = Gender.FEMALE;
+                    });
+                  },
+                  colour: selectedGender == Gender.FEMALE
+                      ? kActiveCardColour
+                      : kInactiveCardColour,
+                  cardChild:
+                      IconWideget(icon: FontAwesomeIcons.venus, text: "FEMALE"),
+                )),
               ],
             ),
           ),
           Expanded(
-
-            child: ReuseContainer(colour: newcolour,cardChild: iconWideget(icon: FontAwesomeIcons.venus,
-                text: "FEMALE"),)
+            child: ReuseContainer(
+              colour: kActiveCardColour,
+              cardChild: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Center(
+                    child: Text(
+                      'HEIGHT',
+                      style: kTextStyle,
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: <Widget>[
+                      Text(height.toString(),
+                          style: kTextNumberStyle,),
+                      Text(
+                        'cm',
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
+                  ),
+                  Slider(
+                    value: height.toDouble(),
+                    min: 120.0,
+                    max: 250.0,
+                    activeColor: Color(0xFFEB1555),
+                    inactiveColor: Color(0xFF8D8E98),
+                    onChanged: (double newValue){
+                      setState(() {
+                        height = newValue.round();
+                      });
+                    },
+                  )
+                ],
+              ),
+            ),
           ),
           Expanded(
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: ReuseContainer(colour: newcolour,cardChild: iconWideget(icon: FontAwesomeIcons.venus,
-                      text: "FEMALE")),
+                  child: ReuseContainer(
+                    colour: kActiveCardColour,
+                  ),
                 ),
                 Expanded(
-                  child: ReuseContainer(colour: newcolour,cardChild: iconWideget(icon: FontAwesomeIcons.venus,
-                      text: "FEMALE")),
+                  child: ReuseContainer(
+                    colour: kActiveCardColour,
+                  ),
                 ),
               ],
             ),
@@ -67,16 +151,15 @@ class _InputPageState extends State<InputPage> {
               child: Text(
                 'Calculate BMI',
                 style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20
-                ),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
               ),
             ),
             height: 50.0,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50.0),
-              color: Colors.pink,
+              color: Colors.teal,
             ),
           )
         ],
@@ -84,4 +167,3 @@ class _InputPageState extends State<InputPage> {
     );
   }
 }
-

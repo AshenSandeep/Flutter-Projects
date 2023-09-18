@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
+import 'constants.dart';
 
-const textStyle = TextStyle(
-  color: Color(0xFF8D8E98),
-  fontWeight: FontWeight.bold,
-);
+class IconWideget extends StatelessWidget {
+   final String? text;
+   final IconData? icon;
 
-class iconWideget extends StatelessWidget {
-   final String text;
-   final IconData icon;
-
-  iconWideget(this.icon,this.text);
+  IconWideget({this.icon,this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +20,12 @@ class iconWideget extends StatelessWidget {
         SizedBox(
           height: 10.0,
         ),
-        Text(text, style: textStyle),
+        Text(text ?? '', style: kTextStyle),
+       // ActionButton(buttonText: 'OK',),
       ],
     );
   }
 }
+
+
+
