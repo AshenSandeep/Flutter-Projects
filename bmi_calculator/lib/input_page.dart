@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'reuseContainer.dart';
 import 'iconWidget.dart';
 import 'constants.dart';
-
+import 'results_page.dart';
 enum Gender {
   MALE,
   FEMALE,
@@ -19,33 +19,25 @@ class _InputPageState extends State<InputPage> {
   Color femaleCardColour = kInactiveCardColour;
   Gender selectedGender = Gender.MALE;
   int height = 180;
-  //1 = male, 0 = female
-  // void updateColour(Gender gender) {
-  //   // if (gender == Gender.MALE) {
-  //   //   if (maleCardColour == inactiveCardColour) {        //these lines of codes are replaced by the Ternary
-  //   //     maleCardColour = activeCardColour;
-  //   //     femaleCardColour = inactiveCardColour;
-  //   //
-  //   //   } else {
-  //   //     maleCardColour = inactiveCardColour;
-  //   //   }
-  //   // }
-  //   //  if (gender == Gender.FEMALE) {
-  //   //   if (femaleCardColour == inactiveCardColour) {
-  //   //     femaleCardColour = activeCardColour;
-  //   //     maleCardColour = inactiveCardColour;
-  //   //   } else {
-  //   //     femaleCardColour = inactiveCardColour;
-  //   //   }
-  //   // }
-  // }
+  int weight = 50;
+  int age = 20;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('BMI CALCULATOR'),
-        backgroundColor: Colors.redAccent,
+        title: Center(
+          child: Text(
+            'BMI CALCULATOR',
+
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24.0,
+              color: Color(0xFFFFA41B),
+            ),
+          ),
+        ),
+        backgroundColor: Color(0xFF082032),
       ),
       body: Column(
         children: <Widget>[
@@ -101,8 +93,10 @@ class _InputPageState extends State<InputPage> {
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.alphabetic,
                     children: <Widget>[
-                      Text(height.toString(),
-                          style: kTextNumberStyle,),
+                      Text(
+                        height.toString(),
+                        style: kTextNumberStyle,
+                      ),
                       Text(
                         'cm',
                         style: TextStyle(
@@ -118,16 +112,16 @@ class _InputPageState extends State<InputPage> {
                       thumbColor: Color(0xFFEB1555),
                       overlayColor: Color(0x29EB1555),
                       thumbShape:
-                        RoundSliderThumbShape(enabledThumbRadius: 15.0),
+                          RoundSliderThumbShape(enabledThumbRadius: 15.0),
                       overlayShape:
-                        RoundSliderOverlayShape(overlayRadius: 30.0),
+                          RoundSliderOverlayShape(overlayRadius: 30.0),
                     ),
                     child: Slider(
                       value: height.toDouble(),
                       min: 120.0,
                       max: 250.0,
                       inactiveColor: Colors.white38,
-                      onChanged: (double newValue){
+                      onChanged: (double newValue) {
                         setState(() {
                           height = newValue.round();
                         });
@@ -140,39 +134,148 @@ class _InputPageState extends State<InputPage> {
           ),
           Expanded(
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Expanded(
                   child: ReuseContainer(
                     colour: kActiveCardColour,
+                    cardChild: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'WEIGHT',
+                          style: kTextStyle,
+                        ),
+                        Text(
+                          weight.toString(),
+                          style: kTextNumberStyle,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            RoundIconButton(
+                              icon: FontAwesomeIcons.minus,
+                              onPressed: () {
+                                setState(
+                                  () {
+                                    if (weight > 0) {
+                                      weight--;
+                                    }
+                                  },
+                                );
+                              },
+                            ),
+                            SizedBox(width: 10),
+                            RoundIconButton(
+                              icon: FontAwesomeIcons.plus,
+                              onPressed: () {
+                                setState(
+                                  () {
+                                    weight++;
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
                   child: ReuseContainer(
                     colour: kActiveCardColour,
+                    cardChild: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'AGE',
+                          style: kTextStyle,
+                        ),
+                        Text(
+                          age.toString(),
+                          style: kTextNumberStyle,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            RoundIconButton(
+                              icon: FontAwesomeIcons.minus,
+                              onPressed: () {
+                                setState(
+                                  () {
+                                    if (age > 0) {
+                                      age--;
+                                    }
+                                  },
+                                );
+                              },
+                            ),
+                            SizedBox(width: 10),
+                            RoundIconButton(
+                              icon: FontAwesomeIcons.plus,
+                              onPressed: () {
+                                setState(
+                                  () {
+                                    age++;
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(top: 10, bottom: 10, left: 100, right: 100),
-            width: double.infinity,
-            child: Center(
-              child: Text(
-                'Calculate BMI',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context,MaterialPageRoute(builder: (context) => ResultsPage()));
+            },
+            child: Container(
+              margin: EdgeInsets.only(top: 10, bottom: 10, left:
+              100, right: 100),
+              width: double.infinity,
+              child: Center(
+                child: Text(
+                  'Calculate BMI',
+                  style: kLargeButtonStyle,
+                ),
               ),
-            ),
-            height: 50.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50.0),
-              color: Colors.teal,
+              height: 50.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50.0),
+                color: Colors.teal,
+              ),
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class RoundIconButton extends StatelessWidget {
+  final IconData icon;
+  final void Function() onPressed;
+
+  RoundIconButton({required this.icon, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      onPressed: onPressed,
+      child: Icon(icon),
+      shape: CircleBorder(),
+      fillColor: Color(0xFF5C5470),
+      elevation: 6.0,
+      constraints: BoxConstraints.tightFor(
+        width: 56.0,
+        height: 56.0,
       ),
     );
   }
