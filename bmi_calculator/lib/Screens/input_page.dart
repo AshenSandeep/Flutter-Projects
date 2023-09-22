@@ -1,9 +1,13 @@
+import 'package:bmi_calculator/calculator_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'reuseContainer.dart';
-import 'iconWidget.dart';
-import 'constants.dart';
+import '../Components/reuseContainer.dart';
+import '../Components/iconWidget.dart';
+import '../constants.dart';
 import 'results_page.dart';
+import '../Components/bottom_button.dart';
+import '../Components/round_icon.dart';
+
 enum Gender {
   MALE,
   FEMALE,
@@ -29,7 +33,6 @@ class _InputPageState extends State<InputPage> {
         title: Center(
           child: Text(
             'BMI CALCULATOR',
-
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 24.0,
@@ -109,6 +112,7 @@ class _InputPageState extends State<InputPage> {
                   SliderTheme(
                     data: SliderTheme.of(context).copyWith(
                       activeTrackColor: Colors.white,
+
                       thumbColor: Color(0xFFEB1555),
                       overlayColor: Color(0x29EB1555),
                       thumbShape:
@@ -232,50 +236,24 @@ class _InputPageState extends State<InputPage> {
               ],
             ),
           ),
-          GestureDetector(
-            onTap: (){
-              Navigator.push(context,MaterialPageRoute(builder: (context) => ResultsPage()));
-            },
-            child: Container(
-              margin: EdgeInsets.only(top: 10, bottom: 10, left:
-              100, right: 100),
-              width: double.infinity,
-              child: Center(
-                child: Text(
-                  'Calculate BMI',
-                  style: kLargeButtonStyle,
+          BottomButton(
+            buttontitle: 'CALCULATE',
+            ontap: () {
+              CalculatorBrain calc =
+                  CalculatorBrain(height: height, weight: weight);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResultsPage(
+                    result: calc.calculateBMI(),
+                    resultType: calc.getResult(),
+                    interpritation: calc.getInterpritation(),
+                  ),
                 ),
-              ),
-              height: 50.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50.0),
-                color: Colors.teal,
-              ),
-            ),
-          )
+              );
+            },
+          ),
         ],
-      ),
-    );
-  }
-}
-
-class RoundIconButton extends StatelessWidget {
-  final IconData icon;
-  final void Function() onPressed;
-
-  RoundIconButton({required this.icon, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return RawMaterialButton(
-      onPressed: onPressed,
-      child: Icon(icon),
-      shape: CircleBorder(),
-      fillColor: Color(0xFF5C5470),
-      elevation: 6.0,
-      constraints: BoxConstraints.tightFor(
-        width: 56.0,
-        height: 56.0,
       ),
     );
   }
