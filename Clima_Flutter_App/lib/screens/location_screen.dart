@@ -74,3 +74,7 @@ class _LocationScreenState extends State<LocationScreen> {
     );
   }
 }
+//
+// var longitude = decodedData['coord']['lon'];
+// double temperature = decodedData['weather'][0]['id'];
+// String cityName = decodedData['name'];
