@@ -27,5 +27,6 @@ flutter:
 
   assets:
     - images/location_background.jpg
+    - images/city_background.jpg
 
   uses-material-design: true

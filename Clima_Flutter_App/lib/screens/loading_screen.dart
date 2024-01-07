@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clima_flutter_app/services/weather.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'location_screen.dart';
 
 
@@ -34,7 +33,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
       body: Center(
         child: SpinKitFadingCircle(
           color: Colors.white,
-          size: 100.0,
+          size: 80.0,
         ),
       ),
     );
