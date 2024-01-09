@@ -9,6 +9,7 @@ class WeatherModel {
     NetworkHelper networkHelper =
         NetworkHelper('$weatherURL?q=$cityName&appid=$apiKey&units=metric');
     var weatherData = await networkHelper.getData();
+    print(weatherData);
     return weatherData;
   }
 
@@ -20,22 +21,41 @@ class WeatherModel {
     var weatherData = await networkHelper.getData();
     return weatherData;
   }
-
-  String getWeatherIcon(int condition) {
+  //
+  // String getWeatherIcon(int condition) {
+  //   if (condition < 300) {
+  //     return '🌩';
+  //   } else if (condition < 400) {
+  //     return '🌧';
+  //   } else if (condition < 600) {
+  //     return '☔️';
+  //   } else if (condition < 700) {
+  //     return '☃️';
+  //   } else if (condition < 800) {
+  //     return '🌫';
+  //   } else if (condition == 800) {
+  //     return '☀️';
+  //   } else if (condition <= 804) {
+  //     return '☁️';
+  //   } else {
+  //     return '🤷‍';
+  //   }
+  // }
+  String getWeatherImage(int condition) {
     if (condition < 300) {
-      return '🌩';
+      return 'images/rainCloud.jpg';
     } else if (condition < 400) {
-      return '🌧';
+      return 'images/rainCloud.jpg';
     } else if (condition < 600) {
-      return '☔️';
+      return 'images/rain.jpg';
     } else if (condition < 700) {
-      return '☃️';
+      return 'images/snow.jpg';
     } else if (condition < 800) {
-      return '🌫';
+      return 'images/mist.jpg';
     } else if (condition == 800) {
-      return '☀️';
+      return 'images/sun.jpg';
     } else if (condition <= 804) {
-      return '☁️';
+      return 'images/cloudy.jpg';
     } else {
       return '🤷‍';
     }
