@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'coin_data.dart';
+import 'package:flutter/cupertino.dart';
+import 'dart:io' show Platform;
 
 class PriceScreen extends StatefulWidget {
   @override
@@ -7,11 +9,11 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
+  CoinData coinModel = CoinData();
+  double rate = 0;
   String selectedCurrency = 'USD';
-
-  List<DropdownMenuItem<String>> getDropdownItems() {
+  DropdownButton<String> androidDropdown() {
     List<DropdownMenuItem<String>> dropdownItems = [];
-
     for (String currency in currenciesList) {
       var newItem = DropdownMenuItem(
         child: Text(currency),
@@ -19,7 +21,58 @@ class _PriceScreenState extends State<PriceScreen> {
       );
       dropdownItems.add(newItem);
     }
-    return dropdownItems;
+
+    return DropdownButton<String>(
+        value: selectedCurrency,
+        items: dropdownItems,
+        onChanged: (value) {
+          setState(() {
+            selectedCurrency = value!;
+          });
+        });
+  }
+
+  CupertinoPicker iosPicker() {
+    List<Text> pickerItems = [];
+    for (String currency in currenciesList) {
+      pickerItems.add(Text(currency));
+    }
+    return CupertinoPicker(
+      backgroundColor: Colors.lightBlue,
+      itemExtent: 32.0,
+      onSelectedItemChanged: (selectedIndex) {
+        print(selectedIndex);
+      },
+      children: pickerItems,
+    );
+  }
+
+  Widget getPicker() {               //check the device android/ios- then change the dropDowMenu
+    if (Platform.isIOS) {
+      return iosPicker();
+    } else if (Platform.isAndroid) {
+      return androidDropdown();
+    }else{
+      return androidDropdown();
+    }
+  }
+
+
+  String bitcoinValue = '?';
+  void getCoinData () async{
+    try {
+      double coinData = await CoinData().getCoinValue();
+      setState(() {
+        bitcoinValue = coinData.toStringAsFixed(0);
+      });
+    } on Exception catch (e) {
+       print(e);
+    }
+  }
+  @override
+  void initState() {
+    super.initState();
+    getCoinData();
   }
 
   @override
@@ -42,8 +95,9 @@ class _PriceScreenState extends State<PriceScreen> {
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
+
                 child: Text(
-                  '1 BTC = ? USD',
+                  '1 BTC = $bitcoinValue USD',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
@@ -58,14 +112,8 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
-            child: DropdownButton<String>(
-                value: selectedCurrency,
-                items: getDropdownItems(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedCurrency = value!;
-                  });
-                }),
+            child: getPicker(),
+
           ),
         ],
       ),
