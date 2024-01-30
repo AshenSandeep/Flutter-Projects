@@ -19,15 +19,17 @@ class _PriceScreenState extends State<PriceScreen> {
         child: Text(currency),
         value: currency,
       );
+
       dropdownItems.add(newItem);
     }
 
     return DropdownButton<String>(
         value: selectedCurrency,
         items: dropdownItems,
-        onChanged: (value) {
+        onChanged: (value) async {
+          selectedCurrency = value!;
+          await getCoinData();
           setState(() {
-            selectedCurrency = value!;
           });
         });
   }
@@ -40,35 +42,96 @@ class _PriceScreenState extends State<PriceScreen> {
     return CupertinoPicker(
       backgroundColor: Colors.lightBlue,
       itemExtent: 32.0,
-      onSelectedItemChanged: (selectedIndex) {
+      onSelectedItemChanged: (selectedIndex) async {
         print(selectedIndex);
+        await getCoinData();
       },
       children: pickerItems,
     );
   }
 
-  Widget getPicker() {               //check the device android/ios- then change the dropDowMenu
+  Widget getPicker() {
+    //check the device android/ios- then change the dropDowMenu
     if (Platform.isIOS) {
       return iosPicker();
     } else if (Platform.isAndroid) {
       return androidDropdown();
-    }else{
+    } else {
       return androidDropdown();
     }
   }
 
-
-  String bitcoinValue = '?';
-  void getCoinData () async{
+  String currency = '?';
+  String coinValue = '?';
+  Future<void> getCoinData() async {
     try {
-      double coinData = await CoinData().getCoinValue();
-      setState(() {
-        bitcoinValue = coinData.toStringAsFixed(0);
-      });
+      double coinData = await CoinData().getCoinValue(selectedCurrency);
+
+      coinValue = coinData.toStringAsFixed(0);
+      setState(() {});
     } on Exception catch (e) {
-       print(e);
+      print(e);
     }
   }
+
+  Future<String> getCoinDataR() async {
+    double coinData = await CoinData().getCoinValue(selectedCurrency);
+    return coinData.toStringAsFixed(0);
+  }
+
+  Widget exchangerCart(String cryptoType) {
+
+    String value = '';
+
+    Future<String> getData() async
+    {
+      try{
+        value = (await CoinData.getValueAsCoinType(cryptoType, selectedCurrency)).toStringAsFixed(2);
+        return 'Done';
+      }
+      catch(e)
+      {
+        rethrow;
+      }
+    }
+
+    return FutureBuilder(
+      future: getData(),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if(snapshot.hasData)
+          {
+            return Padding(
+              padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
+              child: Card(
+                color: Colors.lightBlueAccent,
+                elevation: 5.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
+                  child: Text(
+                    '1 $cryptoType = $value $selectedCurrency',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }
+        else if(snapshot.hasError)
+          {
+            return Text('Error fetching data',);
+          }
+        else return Text('Loading');
+      },
+
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -85,35 +148,15 @@ class _PriceScreenState extends State<PriceScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
-            child: Card(
-              color: Colors.lightBlueAccent,
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
-
-                child: Text(
-                  '1 BTC = $bitcoinValue USD',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          exchangerCart('BTC'),
+          exchangerCart('ETH'),
+          exchangerCart('LTC'),
           Container(
             height: 150.0,
             alignment: Alignment.center,
             padding: EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
             child: getPicker(),
-
           ),
         ],
       ),
