@@ -1,8 +1,8 @@
-import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class ChatScreen extends StatefulWidget {
   static const String id = 'chat_screen';
@@ -14,6 +14,8 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final _auth = FirebaseAuth.instance;
   late User? loggedUser;
+  final _fireStore = FirebaseFirestore.instance;
+  late String messageText ;
 
   void getCurrentUser() async {
     try {
@@ -24,10 +26,17 @@ class _ChatScreenState extends State<ChatScreen> {
       }
       else
         {
+          
           loggedUser = null;
         }
     } catch (e) {
       print(e);
+    }
+  }
+  void getMessages() async{
+    final messages = await _fireStore.collection('messages').get();
+    for (var message in messages.docs){
+      print(message);
     }
   }
   @override
@@ -45,7 +54,9 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
               icon: Icon(Icons.close),
               onPressed: () {
-                //Implement logout functionality
+                getMessages();
+                // _auth.signOut();
+                // Navigator.pop(context);
               }),
         ],
         title: Text('⚡️Chat'),
@@ -64,14 +75,14 @@ class _ChatScreenState extends State<ChatScreen> {
                   Expanded(
                     child: TextField(
                       onChanged: (value) {
-                        //Do something with the user input.
+                        messageText = value;
                       },
                       decoration: kMessageTextFieldDecoration,
                     ),
                   ),
                   TextButton(
                     onPressed: () {
-                      //Implement send functionality.
+                      _fireStore.collection('messages').add({'text':messageText,'sender':loggedUser?.email});
                     },
                     child: Text(
                       'Send',
