@@ -12,6 +12,7 @@ class RoundedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Size deviceSize = MediaQuery.of(context).size;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: Material(
@@ -20,7 +21,7 @@ class RoundedButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(30.0),
         child: MaterialButton(
           onPressed: onPressed,
-          minWidth: 200.0,
+          minWidth: 200,
           height: 42.0,
           child: Text(
             buttonName,
