@@ -13,7 +13,8 @@ enum Gender {
   FEMALE,
 }
 
-class InputPage extends StatefulWidget {
+class
+InputPage extends StatefulWidget {
   @override
   State<InputPage> createState() => _InputPageState();
 }
